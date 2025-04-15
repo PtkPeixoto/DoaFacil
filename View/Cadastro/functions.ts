@@ -15,4 +15,21 @@ const consultaCep = async (cep: string) => {
   }
 };
 
-export { consultaCep };
+const consultaCNPJ = async (cnpj: string) => {
+  try {
+    const validCNPJ = cnpj.replace(/\D/g, "").trim();
+
+    if (validCNPJ.length !== 14) {
+      throw new Error("CNPJ inválido");
+    }
+    const response = await brasilApi.get("/cnpj/v1/" + validCNPJ);
+    
+    if (response.status === 200) {
+        return response.data;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { consultaCep, consultaCNPJ };

@@ -11,7 +11,7 @@ import {
   Button,
   ActivityIndicator,
 } from "react-native-paper";
-import { consultaCep } from "./functions";
+import { consultaCep, consultaCNPJ } from "./functions";
 import { IField } from "../../Types/fields";
 
 export default function Cadastro() {
@@ -22,32 +22,6 @@ export default function Cadastro() {
     { id: 2, label: "Retirada", value: "retirada" },
   ]);
   const [fields, setFields] = React.useState<IField[]>([
-    {
-      key: "name",
-      label: "Nome",
-      placeholder: `${
-        selectedType === "doacao" ? "Nome do doador" : "Nome do retirante"
-      }`,
-      keyboardType: "default",
-    },
-    {
-      key: "email",
-      label: "Email",
-      placeholder: `${
-        selectedType === "doacao" ? "Email do doador" : "Email do retirante"
-      }`,
-      keyboardType: "email-address",
-    },
-    {
-      key: "phone",
-      label: "Telefone",
-      placeholder: `${
-        selectedType === "doacao"
-          ? "Telefone do doador"
-          : "Telefone do retirante"
-      }`,
-      keyboardType: "phone-pad",
-    },
     {
       key: "zipCode",
       label: "Cep",
@@ -75,6 +49,56 @@ export default function Cadastro() {
       placeholder: `Estado`,
     },
   ]);
+  // Campos adicionais para retirada
+  const [fieldsRetirada, setFieldsRetirada] = React.useState<IField[]>([
+    {
+      key: "name",
+      label: "Nome",
+      placeholder: `${
+        selectedType === "doacao" ? "Nome do doador" : "Nome do retirante"
+      }`,
+      keyboardType: "default",
+    },
+    {
+      key: "email",
+      label: "Email",
+      placeholder: `${
+        selectedType === "doacao" ? "Email do doador" : "Email do retirante"
+      }`,
+      keyboardType: "email-address",
+    },
+    {
+      key: "phone",
+      label: "Telefone",
+      placeholder: `${
+        selectedType === "doacao"
+          ? "Telefone do doador"
+          : "Telefone do retirante"
+      }`,
+      keyboardType: "phone-pad",
+    },
+  ]);
+  // Campos adicionais para doação
+  const [fieldsDoacao, setFieldsDoacao] = React.useState<IField[]>([
+    {
+      key: "CNPJ",
+      label: "CNPJ",
+      placeholder: "CNPJ",
+      keyboardType: "default",
+    },
+    {
+      key: "fantasyName",
+      label: "Nome Fantasia",
+      placeholder: "Nome Fantasia",
+      keyboardType: "default",
+    },
+    {
+      key: "companyName",
+      label: "Razão Social",
+      placeholder: "Razão Social",
+      keyboardType: "default",
+    },
+  ]);
 
   const [payload, setPayload] = React.useState({
     name: "",
@@ -85,11 +109,15 @@ export default function Cadastro() {
     city: "",
     state: "",
     zipCode: "",
+    CNPJ: "19131243000197",
+    fantasyName: "",
+    companyName: "",
   });
 
   const [dialogVisible, setDialogVisible] = React.useState(false);
   const [dialogMessage, setDialogMessage] = React.useState("");
-  const [loadingFields, setLoadingFields] = React.useState(false);
+  const [loadingFieldsCep, setLoadingFieldsCep] = React.useState(false);
+  const [loadingFieldsCNPJ, setLoadingFieldsCNPJ] = React.useState(false);
 
   const handleCep = async () => {
     if (payload.zipCode.length < 8) return;
@@ -101,7 +129,7 @@ export default function Cadastro() {
       state: "",
     });
 
-    setLoadingFields(true);
+    setLoadingFieldsCep(true);
 
     const response = await consultaCep(payload.zipCode);
     if (response) {
@@ -117,7 +145,32 @@ export default function Cadastro() {
       setDialogVisible(true);
     }
 
-    setLoadingFields(false);
+    setLoadingFieldsCep(false);
+  };
+
+  const handleCNPJ = async () => {
+    if (payload.CNPJ.length < 8) return;
+    setPayload({
+      ...payload,
+      fantasyName: "",
+      companyName: "",
+    });
+
+    setLoadingFieldsCNPJ(true);
+
+    const response = await consultaCNPJ(payload.CNPJ);
+    if (response) {
+      setPayload({
+        ...payload,
+        fantasyName: response.nome_fantasia,
+        companyName: response.razao_social,
+      });
+    } else {
+      setDialogMessage("CNPJ não encontrado");
+      setDialogVisible(true);
+    }
+
+    setLoadingFieldsCNPJ(false);
   };
 
   return (
@@ -139,7 +192,11 @@ export default function Cadastro() {
         </View>
 
         <FlatList
-          data={fields}
+          data={
+            selectedType === "doacao"
+              ? [...fieldsDoacao, ...fields]
+              : [...fieldsRetirada, ...fields]
+          }
           keyExtractor={(item) => item.key}
           renderItem={({ item }) => (
             <View>
@@ -156,13 +213,32 @@ export default function Cadastro() {
                     if (item.key === "zipCode") {
                       handleCep();
                     }
+
+                    if (item.key === "CNPJ") {
+                      handleCNPJ();
+                    }
                   }}
                   value={payload[item.key]}
                 />
-                {loadingFields &&
+                {loadingFieldsCep &&
                   ["address", "neighborhood", "city", "state"].includes(
                     item.key
-                  ) && <ActivityIndicator size="small" color="gray" style={defaultStyles.loadingIndicator} />}
+                  ) && (
+                    <ActivityIndicator
+                      size="small"
+                      color="gray"
+                      style={defaultStyles.loadingIndicator}
+                    />
+                  )}
+
+                {loadingFieldsCNPJ &&
+                  ["fantasyName", "companyName"].includes(item.key) && (
+                    <ActivityIndicator
+                      size="small"
+                      color="gray"
+                      style={defaultStyles.loadingIndicator}
+                    />
+                  )}
               </View>
             </View>
           )}
