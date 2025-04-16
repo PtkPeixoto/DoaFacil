@@ -29,6 +29,26 @@ export default function Cadastro() {
       keyboardType: "numeric",
     },
     {
+      key: "username",
+      label: "Usuário",
+      placeholder: `Usuário`,
+      keyboardType: "default",
+    },
+    {
+      key: "password",
+      label: "Senha",
+      placeholder: `Senha`,
+      keyboardType: "default",
+      secureTextEntry: true,
+    },
+    {
+      key: "confirm_password",
+      label: "Confirmação de Senha",
+      placeholder: `Confirmação de Senha`,
+      keyboardType: "default",
+      secureTextEntry: true,
+    },
+    {
       key: "address",
       label: "Endereço",
       placeholder: `Endereço`,
@@ -103,6 +123,8 @@ export default function Cadastro() {
   const [payload, setPayload] = React.useState({
     name: "",
     email: "",
+    password: "",
+    confirm_password: "",
     phone: "",
     address: "",
     neighborhood: "",
@@ -205,6 +227,7 @@ export default function Cadastro() {
                 <TextInput
                   placeholder={item.placeholder}
                   keyboardType={item.keyboardType || "default"}
+                  secureTextEntry={item.secureTextEntry || false}
                   style={defaultStyles.input}
                   onChangeText={(text) => {
                     setPayload({ ...payload, [item.key]: text });

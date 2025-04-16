@@ -1,13 +1,20 @@
 import axios, { AxiosInstance } from 'axios';
+import { API_BASE_URL, BRASIL_API_BASE_URL, TIMEOUT } from '@env';
 
 const api = axios.create({
-    baseURL: 'https://api.example.com',
-    timeout: 10000, // Set a timeout of 10 seconds
+    baseURL: API_BASE_URL,
+    timeout: Number(TIMEOUT),
+    headers: {
+        // 'User-Agent': 'PostmanRuntime/7.43.0',
+        // 'Accept': '*/*',
+        // 'Accept-Encoding': 'gzip, deflate, br',
+        // 'Connection': 'keep-alive',
+    },
 });
 
 const brasilApi = axios.create({
-    baseURL: 'https://brasilapi.com.br/api',
-    timeout: 10000, // Set a timeout of 10 seconds
+    baseURL: BRASIL_API_BASE_URL,
+    timeout: Number(TIMEOUT),
 });
 
 const configureInterceptors = (instance: AxiosInstance) => {
@@ -16,15 +23,16 @@ const configureInterceptors = (instance: AxiosInstance) => {
             return response;
         },
         (error) => {
-            // Trata erros de forma centralizada
             if (error.response) {
-                // Erros com resposta do servidor (status 4xx ou 5xx)
                 console.error(`Erro na API: ${error.response.status} - ${error.response.data.message || error.response.statusText}`);
+                console.error(`URL da requisição: ${error.response.config.url}`);
             } else if (error.request) {
-                // Erros sem resposta do servidor (ex.: timeout, sem conexão)
                 console.error('Erro na API: Sem resposta do servidor.');
+                console.error(`URL da requisição: ${error.config?.baseURL || ''}${error.config?.url}`);
+                console.error(`Método HTTP: ${error.config?.method}`);
+                console.error(`Headers da requisição: ${JSON.stringify(error.config?.headers, null, 2)}`);
+                console.error(`Timeout configurado: ${error.config?.timeout}ms`);
             } else {
-                // Erros na configuração da requisição
                 console.error(`Erro na API: ${error.message}`);
             }
     
