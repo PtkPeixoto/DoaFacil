@@ -14,40 +14,25 @@ export const getUsersByType = async (userType: ICadastroTypes) => {
 
 export const validateUser = async (email: string, password: string) => {
     const response = await api.post("/validateUser", { email, password });
-    
-    if (response.status === 200) {
-        return response.data;
-    } else {
-        throw new Error("Failed to validate user");
-    }
+    return response;
 }
 
 export const getDonations = async () => {
     const donations = await api.get("/donations");
-    
-    if (donations.status === 200) {
-        return donations.data;
-    } else {
-        throw new Error("Failed to fetch donations");
-    }
+    return donations;
 }
 
 export const getDonationById = async (id: string) => {
     const donation = await api.get(`/donations/${id}`);
-    
-    if (donation.status === 200) {
-        return donation.data;
-    } else {
-        throw new Error("Failed to fetch donation by ID");
-    }
+    return donation;
 }
 
 export const createDonation = async (donation: Donation) => {
     const response = await api.post("/donations", donation);
-    
-    if (response.status === 201) {
-        return response.data;
-    } else {
-        throw new Error("Failed to create donation");
-    }
+    return response;    
+}
+
+export const getRescues = async () => {
+    const response = await api.get("/rescues");
+    return response;
 }

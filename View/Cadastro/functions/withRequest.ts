@@ -16,7 +16,6 @@ const WithRequest = () => {
 
   const {
     payload,
-    selectedType,
     setDialogTitle,
     setDialogMessage,
     setDialogVisible,
@@ -70,7 +69,7 @@ const WithRequest = () => {
     }
 
     const newFields = { ...payload };
-    if (selectedType === "user") {
+    if (payload.user_type === "user") {
       delete newFields.CNPJ;
       delete newFields.fantasyName;
       delete newFields.companyName;

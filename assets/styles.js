@@ -68,6 +68,34 @@ const defaultStyles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "#fff",
   },
+  companyCard:{
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+    marginVertical: 10,
+    backgroundColor: "#fff",
+    shadowColor: "#000",
+  },
+  companyName:{
+    fontSize: 16,
+    color: "#333",
+    marginBottom: 10,
+  },
+  companyDetails:{
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 5,
+  },
+  companyDetailsTextDestac:{
+    fontWeight: "bold",
+  },
+  companyCardButton:{
+    backgroundColor: "#007BFF",
+    borderRadius: 5,
+    marginTop: 10,
+    textDecorationLine: "none",
+  },
 });
 
 export default defaultStyles;

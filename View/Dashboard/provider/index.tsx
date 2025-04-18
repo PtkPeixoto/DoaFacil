@@ -1,7 +1,14 @@
 import React, { createContext, useContext, useState } from "react";
 import { ContextData, Payload } from "./types";
 
-export const initialPayload: Payload = {};
+export const initialPayload: Payload = {
+  companies: [],
+  setCompanies: () => {},
+  rescues: [],
+  setRescues: () => {},
+  donations: [],
+  setDonations: () => {},
+};
 
 const Context = createContext<ContextData | undefined>(undefined);
 
@@ -15,7 +22,8 @@ export const ContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMessage, setDialogMessage] = useState("");
 
-  React.useEffect(() => {}, []);
+  React.useEffect(() => {
+  }, []);
 
   return (
     <Context.Provider
