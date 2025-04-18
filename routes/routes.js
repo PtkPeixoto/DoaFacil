@@ -2,7 +2,7 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import Dashboard from '../View/Dashboard/index';
-import Cadastro from '../View/Cadastro';
+import { Cadastro } from '../View/Cadastro';
 
 const Drawer = createDrawerNavigator();
 
