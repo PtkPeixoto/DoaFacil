@@ -8,6 +8,7 @@ import {
   Portal,
   Button,
   ActivityIndicator,
+  Icon,
 } from "react-native-paper";
 
 import { useDataContext } from "../provider/index";
@@ -112,7 +113,12 @@ export default function Content() {
                         </Text>{" "}
                         {company.email}
                       </Text>
+
+                      <View style={{ width:"100%", display: "flex", justifyContent: "center", alignItems: "center"}}><Icon source="chevron-up" size={20}/></View>
                     </>
+                  )}
+                  {!showDetails.includes(company.id) && (
+                    <View style={{ width:"100%", display: "flex", justifyContent: "center", alignItems: "center"}}><Icon source="chevron-down" size={20}/></View>
                   )}
                 </Pressable>
               ))}
