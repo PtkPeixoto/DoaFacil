@@ -19,6 +19,7 @@ import WithoutRequest from "../functions/withoutRequest";
 
 export default function Content() {
   const {
+    isLoading,
     payload,
     setPayload,
     typeIsOpen,
@@ -28,19 +29,25 @@ export default function Content() {
     setSelectedType,
     setTypes,
     fields,
-    fieldsDoacao,
-    fieldsRetirada,
+    fieldsCompany,
+    fieldsUser,
     loadingFieldsCep,
     loadingFieldsCNPJ,
     dialogVisible,
     setDialogVisible,
+    dialogTitle,
     dialogMessage,
   } = useCadastroContext();
-  const {} = WithRequest();
-  const { handleCep, handleCNPJ, handleCreate } = WithoutRequest();
+  const { handleCreate } = WithRequest();
+  const { handleCep, handleCNPJ } = WithoutRequest();
 
   return (
     <PaperProvider>
+      {isLoading && (
+      <View style={defaultStyles.loadingOverlay}>
+        <ActivityIndicator size="large" color="#007BFF" />
+      </View>
+    )}
       <View style={defaultStyles.container}>
         <View>
           <Text>Tipo</Text>
@@ -49,7 +56,7 @@ export default function Content() {
             value={selectedType}
             items={types}
             setOpen={setTypeIsOpen}
-            setValue={setSelectedType}
+            setValue={(val)=>{setSelectedType(val); setPayload({...payload, user_type: val as unknown as string})}}
             setItems={setTypes}
             placeholder="Selecione um tipo"
             style={defaultStyles.dropDownList}
@@ -59,9 +66,9 @@ export default function Content() {
 
         <FlatList
           data={
-            selectedType === "doacao"
-              ? [...fieldsDoacao, ...fields]
-              : [...fieldsRetirada, ...fields]
+            selectedType === "company"
+              ? [...fieldsCompany, ...fields]
+              : [...fieldsUser, ...fields]
           }
           keyExtractor={(item) => item.key}
           renderItem={({ item }) => (
@@ -147,7 +154,7 @@ export default function Content() {
           )}
         />
 
-        <Button onPress={handleCreate}>Cadastrar</Button>
+        <Button onPress={handleCreate} style={{ ...defaultStyles.button, ...defaultStyles.buttonCreate }}><Text style={defaultStyles.buttonText}>Cadastrar</Text></Button>
       </View>
 
       <Portal>
@@ -155,7 +162,7 @@ export default function Content() {
           visible={dialogVisible}
           onDismiss={() => setDialogVisible(false)}
         >
-          <Dialog.Title>Aviso</Dialog.Title>
+          <Dialog.Title>{dialogTitle}</Dialog.Title>
           <Dialog.Content>
             <Text>{dialogMessage}</Text>
           </Dialog.Content>

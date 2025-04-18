@@ -24,6 +24,11 @@ const configureInterceptors = (instance: AxiosInstance) => {
         },
         (error) => {
             if (error.response) {
+                // Verifica se o status é 422
+                if (error.response.status === 422 || error.response.status === 401) {
+                    return error.response;
+                }
+
                 console.error(`Erro na API: ${error.response.status} - ${error.response.data.message || error.response.statusText}`);
                 console.error(`URL da requisição: ${error.response.config.url}`);
             } else if (error.request) {
@@ -36,8 +41,8 @@ const configureInterceptors = (instance: AxiosInstance) => {
                 console.error(`Erro na API: ${error.message}`);
             }
     
-            // Opcional: Retornar uma mensagem de erro personalizada
-            // return Promise.reject(error);
+            // Retorna uma mensagem de erro personalizada para outros casos
+            return Promise.reject(error);
         }
     );
 }

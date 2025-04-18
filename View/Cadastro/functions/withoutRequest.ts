@@ -11,7 +11,6 @@ const WithoutRequest = () => {
     setLoadingFieldsCNPJ,
     setDialogMessage,
     setDialogVisible,
-    selectedType,
   } = useCadastroContext();
   const { consultaCep, consultaCNPJ } = WithRequest();
 
@@ -71,52 +70,7 @@ const WithoutRequest = () => {
     setLoadingFieldsCNPJ(false);
   };
 
-  const handleCreate = async () => {
-    if (
-      payload.password === "" ||
-      payload.password !== payload.confirm_password
-    ) {
-      setDialogMessage("As senhas não coincidem");
-      setDialogVisible(true);
-      return;
-    }
-
-    const newFields = { ...payload };
-    if (selectedType === "retirada") {
-      delete newFields.CNPJ;
-      delete newFields.fantasyName;
-      delete newFields.companyName;
-    }
-
-    const allFieldsFilled = Object.values(newFields).every(
-      (value) => value.trim() !== ""
-    );
-
-    if (!allFieldsFilled) {
-      setDialogMessage("Por favor, preencha todos os campos.");
-      setDialogVisible(true);
-      return;
-    }
-
-    const response = await createUser(payload as unknown as User);
-    if (!response) {
-      setDialogMessage("Erro ao criar usuário");
-      setDialogVisible(true);
-      return;
-    }
-
-    if (response.status !== 201) {
-      console.log({ response });
-      setDialogMessage("Erro ao criar usuário");
-      setDialogVisible(true);
-      return;
-    }
-
-    setDialogMessage("Usuário criado com sucesso!");
-    setDialogVisible(true);
-  };
-
-  return { handleCep, handleCNPJ, handleCreate };
+  return { handleCep, handleCNPJ };
 };
 
 export default WithoutRequest;

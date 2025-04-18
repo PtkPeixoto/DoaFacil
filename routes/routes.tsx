@@ -3,8 +3,11 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import Dashboard from '../View/Dashboard/index';
 import { Cadastro } from '../View/Cadastro';
+import { RootStackParamList } from '../Types/routes';
 
-const Drawer = createDrawerNavigator();
+
+
+const Drawer = createDrawerNavigator<RootStackParamList>();
 
 const AppNavigator = () => {
     return (

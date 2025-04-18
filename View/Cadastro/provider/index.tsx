@@ -1,48 +1,27 @@
 import React, { createContext, useContext, useState } from "react";
 import { IField } from "../../../Types/fields";
+import { CadastroContextData, Payload } from "./types";
 
-export interface Payload {
-  name: string;
-    email: string;
-    password: string;
-    confirm_password: string;
-    phone: string;
-    address: string;
-    neighborhood: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    CNPJ?: string;
-    fantasyName?: string;
-    companyName?: string;
-}
-// Define o tipo do estado compartilhado
-interface CadastroContextData {
-  payload: Payload;
-  setPayload: React.Dispatch<React.SetStateAction<Payload>>;
-  types: Array<{ id: number; label: string; value: string }>;
-  setTypes: React.Dispatch<
-    React.SetStateAction<Array<{ id: number; label: string; value: string }>>
-  >;
-  typeIsOpen: boolean;
-  setTypeIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  dialogVisible: boolean;
-  setDialogVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  dialogMessage: string;
-  setDialogMessage: React.Dispatch<React.SetStateAction<string>>;
-  loadingFieldsCep: boolean;
-  setLoadingFieldsCep: React.Dispatch<React.SetStateAction<boolean>>;
-  loadingFieldsCNPJ: boolean;
-  setLoadingFieldsCNPJ: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedType: string | null;
-  setSelectedType: React.Dispatch<React.SetStateAction<string | null>>;
-  fields: IField[];
-  setFields: React.Dispatch<React.SetStateAction<IField[]>>;
-  fieldsRetirada: IField[];
-  setFieldsRetirada: React.Dispatch<React.SetStateAction<IField[]>>;
-  fieldsDoacao: IField[];
-  setFieldsDoacao: React.Dispatch<React.SetStateAction<IField[]>>;
-}
+
+
+export const initialPayload: Payload = {
+  user_type: "",
+  name: "Patrick Peixoto",
+  email: "patrickpeixoto.web@gmail.com",
+  password: "Ptk@26952431",
+  password_confirmation: "Ptk@26952431",
+  phone: "(21) 98165-8606",
+  address: "Rua Garanhuns, 91",
+  neighborhood: "Jardim Pernambuco",
+  city: "Nova Iguaçu",
+  state: "RJ",
+  zipCode: "26275-540",
+  CNPJ: "19131243000197",
+  fantasyName: "",
+  companyName: "",
+};
+
+
 
 // Cria o contexto
 const CadastroContext = createContext<CadastroContextData | undefined>(
@@ -53,42 +32,34 @@ const CadastroContext = createContext<CadastroContextData | undefined>(
 export const CadastroProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-
-  const [payload, setPayload] = useState<Payload>({
-    name: "",
-    email: "",
-    password: "",
-    confirm_password: "",
-    phone: "",
-    address: "",
-    neighborhood: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    CNPJ: "",
-    fantasyName: "",
-    companyName: "",
-  });
+  const [payload, setPayload] = useState<Payload>(initialPayload);
 
   const [types, setTypes] = React.useState([
-    { id: 1, label: "Doação", value: "doacao" },
-    { id: 2, label: "Retirada", value: "retirada" },
+    { id: 1, label: "Usuário", value: "user" },
+    { id: 2, label: "Empresa", value: "company" },
   ]);
 
+  const [isLoading, setIsLoading] = React.useState(false);
   const [typeIsOpen, setTypeIsOpen] = React.useState(false);
   const [dialogVisible, setDialogVisible] = React.useState(false);
   const [dialogMessage, setDialogMessage] = React.useState("");
+  const [dialogTitle, setDialogTitle] = React.useState("");
   const [loadingFieldsCep, setLoadingFieldsCep] = React.useState(false);
   const [loadingFieldsCNPJ, setLoadingFieldsCNPJ] = React.useState(false);
-  const [selectedType, setSelectedType] = React.useState<typeof types[number]["value"] | null>(null);
+  const [selectedType, setSelectedType] = React.useState<
+    (typeof types)[number]["value"] | null
+  >(null);
 
-  const [fields, setFields] = React.useState<IField[]>([
+  const [fields, setFields] = React.useState<IField[]>([    
     {
-      key: "username",
-      label: "Usuário",
-      placeholder: `Usuário`,
-      keyboardType: "default",
+      key: "email",
+      label: "Email",
+      placeholder: `${
+        selectedType === "company" ? "Email para contato" : "Email"
+      }`,
+      keyboardType: "email-address",
     },
+
     {
       key: "password",
       label: "Senha",
@@ -97,7 +68,7 @@ export const CadastroProvider: React.FC<{ children: React.ReactNode }> = ({
       secureTextEntry: true,
     },
     {
-      key: "confirm_password",
+      key: "password_confirmation",
       label: "Confirmação de Senha",
       placeholder: `Confirmação de Senha`,
       keyboardType: "default",
@@ -130,37 +101,29 @@ export const CadastroProvider: React.FC<{ children: React.ReactNode }> = ({
       placeholder: `Estado`,
     },
   ]);
-  // Campos adicionais para retirada
-  const [fieldsRetirada, setFieldsRetirada] = React.useState<IField[]>([
+
+  const [fieldsUser, setFieldsUser] = React.useState<IField[]>([
     {
       key: "name",
       label: "Nome",
       placeholder: `${
-        selectedType === "doacao" ? "Nome do doador" : "Nome do retirante"
+        selectedType === "company" ? "Nome do contato" : "Nome"
       }`,
       keyboardType: "default",
-    },
-    {
-      key: "email",
-      label: "Email",
-      placeholder: `${
-        selectedType === "doacao" ? "Email do doador" : "Email do retirante"
-      }`,
-      keyboardType: "email-address",
     },
     {
       key: "phone",
       label: "Telefone",
       placeholder: `${
-        selectedType === "doacao"
-          ? "Telefone do doador"
-          : "Telefone do retirante"
+        selectedType === "company"
+          ? "Telefone para contato"
+          : "Telefone"
       }`,
       keyboardType: "phone-pad",
     },
   ]);
-  // Campos adicionais para doação
-  const [fieldsDoacao, setFieldsDoacao] = React.useState<IField[]>([
+
+  const [fieldsCompany, setFieldsCompany] = React.useState<IField[]>([
     {
       key: "CNPJ",
       label: "CNPJ",
@@ -181,15 +144,21 @@ export const CadastroProvider: React.FC<{ children: React.ReactNode }> = ({
     },
   ]);
 
-  React.useEffect(()=>{
-    if(selectedType === "retirada"){
-      setPayload({...payload, CNPJ: "", fantasyName: "", companyName: ""});
+  React.useEffect(() => {
+    let fieldsToclean = {};
+
+    if (selectedType === "user") {
+      fieldsToclean = { CNPJ: "", fantasyName: "", companyName: "" };
     }
+
+    setPayload({ ...payload, user_type: selectedType || "", ...fieldsToclean });
   }, [selectedType]);
 
   return (
     <CadastroContext.Provider
       value={{
+        isLoading,
+        setIsLoading,
         payload,
         setPayload,
         types,
@@ -198,6 +167,8 @@ export const CadastroProvider: React.FC<{ children: React.ReactNode }> = ({
         setTypeIsOpen,
         dialogVisible,
         setDialogVisible,
+        dialogTitle,
+        setDialogTitle,
         dialogMessage,
         setDialogMessage,
         loadingFieldsCep,
@@ -208,10 +179,10 @@ export const CadastroProvider: React.FC<{ children: React.ReactNode }> = ({
         setSelectedType,
         fields,
         setFields,
-        fieldsRetirada,
-        setFieldsRetirada,
-        fieldsDoacao,
-        setFieldsDoacao,
+        fieldsUser,
+        setFieldsUser,
+        fieldsCompany,
+        setFieldsCompany,
       }}
     >
       {children}

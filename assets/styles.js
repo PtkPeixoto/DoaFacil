@@ -1,6 +1,13 @@
 import { StyleSheet } from "react-native";
 
 const defaultStyles = StyleSheet.create({
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 10,
+  },
   container: {
     margin: 20,
     borderRadius: 10,
@@ -36,12 +43,17 @@ const defaultStyles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#007BFF",
-    padding: 10,
     borderRadius: 5,
+    marginTop: 20,
+    textDecorationLine: "none",
+  },
+  buttonCreate: {
+    backgroundColor: "#28a745",
   },
   buttonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 18,
+    height: 50,
   },
   dropDownList: {
     height: 50,
