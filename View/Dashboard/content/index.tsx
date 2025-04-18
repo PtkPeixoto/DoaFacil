@@ -15,19 +15,12 @@ import { useDataContext } from "../provider/index";
 import WithRequest from "../functions/withRequest";
 import WithoutRequest from "../functions/withoutRequest";
 import { useFocusEffect } from "@react-navigation/native";
+import { useGlobalContext } from "../../Provider/GlobalProvider";
 
 export default function Content() {
-  const {
-    isLoading,
-    payload,
-    setPayload,
-    dialogVisible,
-    setDialogVisible,
-    setDialogTitle,
-    setDialogMessage,
-    dialogTitle,
-    dialogMessage,
-  } = useDataContext();
+  const { payload, setPayload } = useDataContext();
+
+  const {  } = useGlobalContext();
 
   const { getCompanies, getDonates, getRescues } = WithRequest();
   // const {  } = WithoutRequest();
@@ -51,100 +44,92 @@ export default function Content() {
   };
 
   return (
-    <PaperProvider>
-      {isLoading && (
-        <View style={defaultStyles.loadingOverlay}>
-          <ActivityIndicator size="large" color="#007BFF" />
-        </View>
+    <View style={defaultStyles.container}>
+      {payload.donations.length > 0 && (
+        <>
+          <View style={{ marginBottom: 20 }}>
+            <Text>Resgates Pendentes</Text>
+          </View>
+        </>
       )}
-      <View style={defaultStyles.container}>
-        {payload.donations.length > 0 && (
-          <>
-            <View style={{ marginBottom: 20 }}>
-              <Text>Resgates Pendentes</Text>
-            </View>
-          </>
-        )}
 
-        {payload.rescues.length > 0 && (
-          <>
-            <View style={{ marginBottom: 20 }}>
-              <Text>Doações</Text>
-            </View>
-          </>
-        )}
+      {payload.rescues.length > 0 && (
+        <>
+          <View style={{ marginBottom: 20 }}>
+            <Text>Doações</Text>
+          </View>
+        </>
+      )}
 
-        {payload.companies.length > 0 && (
-          <>
-            <View style={{ marginBottom: 20 }}>
-              <Text>Últimas empresas cadastradas</Text>
-              {payload.companies.map((company) => (
-                <Pressable
-                  key={company.id}
-                  style={{ ...defaultStyles.companyCard }}
-                  onPress={() => {
-                    pressCompany(company.id);
-                  }}
-                >
-                  <Text style={defaultStyles.companyName}>{company.name}</Text>
-                  <Text style={defaultStyles.companyDetails}>
-                    <Text style={defaultStyles.companyDetailsTextDestac}>
-                      CNPJ:
-                    </Text>{" "}
-                    {company.cnpj}
-                  </Text>
-                  <Text style={defaultStyles.companyDetails}>
-                    <Text style={defaultStyles.companyDetailsTextDestac}>
-                      Endereço:
-                    </Text>{" "}
-                    {company.address}, {company.city} - {company.state}
-                  </Text>
-                  {showDetails.includes(company.id) && (
-                    <>
-                      <Text style={defaultStyles.companyDetails}>
-                        <Text style={defaultStyles.companyDetailsTextDestac}>
-                          Telefone:
-                        </Text>{" "}
-                        {company.phone}
-                      </Text>
-                      <Text style={defaultStyles.companyDetails}>
-                        <Text style={defaultStyles.companyDetailsTextDestac}>
-                          Email:
-                        </Text>{" "}
-                        {company.email}
-                      </Text>
+      {payload.companies.length > 0 && (
+        <>
+          <View style={{ marginBottom: 20 }}>
+            <Text>Últimas empresas cadastradas</Text>
+            {payload.companies.map((company) => (
+              <Pressable
+                key={company.id}
+                style={{ ...defaultStyles.companyCard }}
+                onPress={() => {
+                  pressCompany(company.id);
+                }}
+              >
+                <Text style={defaultStyles.companyName}>{company.name}</Text>
+                <Text style={defaultStyles.companyDetails}>
+                  <Text style={defaultStyles.companyDetailsTextDestac}>
+                    CNPJ:
+                  </Text>{" "}
+                  {company.cnpj}
+                </Text>
+                <Text style={defaultStyles.companyDetails}>
+                  <Text style={defaultStyles.companyDetailsTextDestac}>
+                    Endereço:
+                  </Text>{" "}
+                  {company.address}, {company.city} - {company.state}
+                </Text>
+                {showDetails.includes(company.id) && (
+                  <>
+                    <Text style={defaultStyles.companyDetails}>
+                      <Text style={defaultStyles.companyDetailsTextDestac}>
+                        Telefone:
+                      </Text>{" "}
+                      {company.phone}
+                    </Text>
+                    <Text style={defaultStyles.companyDetails}>
+                      <Text style={defaultStyles.companyDetailsTextDestac}>
+                        Email:
+                      </Text>{" "}
+                      {company.email}
+                    </Text>
 
-                      <View style={{ width:"100%", display: "flex", justifyContent: "center", alignItems: "center"}}><Icon source="chevron-up" size={20}/></View>
-                    </>
-                  )}
-                  {!showDetails.includes(company.id) && (
-                    <View style={{ width:"100%", display: "flex", justifyContent: "center", alignItems: "center"}}><Icon source="chevron-down" size={20}/></View>
-                  )}
-                </Pressable>
-              ))}
-            </View>
-          </>
-        )}
-      </View>
-
-      <Portal>
-        <Dialog
-          visible={dialogVisible}
-          onDismiss={() => {
-            setDialogVisible(false);
-            setDialogTitle("");
-            setDialogMessage("");
-          }}
-        >
-          <Dialog.Title>{dialogTitle}</Dialog.Title>
-          <Dialog.Content>
-            <Text>{dialogMessage}</Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={() => setDialogVisible(false)}>OK</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    </PaperProvider>
+                    <View
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Icon source="chevron-up" size={20} />
+                    </View>
+                  </>
+                )}
+                {!showDetails.includes(company.id) && (
+                  <View
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Icon source="chevron-down" size={20} />
+                  </View>
+                )}
+              </Pressable>
+            ))}
+          </View>
+        </>
+      )}
+    </View>
   );
 }

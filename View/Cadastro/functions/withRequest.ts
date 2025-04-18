@@ -1,10 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import { brasilApi } from "../../../Api/api";
 import { createUser } from "../../../Api/functions";
-import { User } from "../../../Api/types";
 import { initialPayload, useCadastroContext } from "../provider";
 import { RootStackParamList } from "../../../Types/routes";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useGlobalContext } from "../../Provider/GlobalProvider";
+import { IUser } from "../../Provider/types";
 
 type NavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -14,14 +15,10 @@ type NavigationProp = NativeStackNavigationProp<
 const WithRequest = () => {
   const navigation = useNavigation<NavigationProp>();
 
-  const {
-    payload,
-    setDialogTitle,
-    setDialogMessage,
-    setDialogVisible,
-    setPayload,
-    setIsLoading,
-  } = useCadastroContext();
+  const { payload, setPayload } = useCadastroContext();
+
+  const { setDialogTitle, setDialogMessage, setDialogVisible, setIsLoading } =
+    useGlobalContext();
 
   const consultaCep = async (cep: string) => {
     try {
@@ -88,7 +85,7 @@ const WithRequest = () => {
     }
 
     try {
-      const response = await createUser(payload as unknown as User);
+      const response = await createUser(payload as unknown as IUser);
       setIsLoading(false);
 
       if (!response) {

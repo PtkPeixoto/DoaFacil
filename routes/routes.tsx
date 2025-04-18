@@ -5,6 +5,7 @@ import { Dashboard } from "../View/Dashboard";
 import { Cadastro } from "../View/Cadastro";
 import { RootStackParamList } from "../Types/routes";
 import { Icon } from "react-native-paper";
+import { Login } from "../View/Login";
 
 const Drawer = createDrawerNavigator<RootStackParamList>();
 
@@ -39,6 +40,16 @@ const AppNavigator = () => {
         <Drawer.Screen
           name="Cadastro"
           component={Cadastro}
+          options={{
+            drawerIcon: ({ color, size }) => (
+              <Icon source="account-plus" color={color} size={size} />
+            ),
+          }}
+        />
+
+        <Drawer.Screen
+          name="Login"
+          component={Login}
           options={{
             drawerIcon: ({ color, size }) => (
               <Icon source="account-plus" color={color} size={size} />

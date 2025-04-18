@@ -1,8 +1,9 @@
 import { ICadastroTypes } from "../View/Cadastro/provider/types";
+import { IUser } from "../View/Provider/types";
 import api from "./api";
-import { Donation, User } from "./types";
+import { Donation } from "./types";
 
-export const createUser = async (user: User) => {
+export const createUser = async (user: IUser) => {
     const response = await api.post("/createUser", user);
     return response;
 }
@@ -13,7 +14,7 @@ export const getUsersByType = async (userType: ICadastroTypes) => {
 }
 
 export const validateUser = async (email: string, password: string) => {
-    const response = await api.post("/validateUser", { email, password });
+    const response = await api.get("/validateUser?email=" + email + "&password=" + password);
     return response;
 }
 

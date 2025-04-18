@@ -3,11 +3,8 @@ import { View, Text } from "react-native";
 
 import defaultStyles from "../../../assets/styles";
 import DropDownPicker from "react-native-dropdown-picker";
-import { FlatList, TextInput } from "react-native-gesture-handler";
+import { FlatList, TextInput} from "react-native-gesture-handler";
 import {
-  Provider as PaperProvider,
-  Dialog,
-  Portal,
   Button,
   ActivityIndicator,
 } from "react-native-paper";
@@ -19,7 +16,6 @@ import WithoutRequest from "../functions/withoutRequest";
 
 export default function Content() {
   const {
-    isLoading,
     payload,
     setPayload,
     typeIsOpen,
@@ -33,21 +29,11 @@ export default function Content() {
     fieldsUser,
     loadingFieldsCep,
     loadingFieldsCNPJ,
-    dialogVisible,
-    setDialogVisible,
-    dialogTitle,
-    dialogMessage,
   } = useCadastroContext();
   const { handleCreate } = WithRequest();
   const { handleCep, handleCNPJ } = WithoutRequest();
 
-  return (
-    <PaperProvider>
-      {isLoading && (
-      <View style={defaultStyles.loadingOverlay}>
-        <ActivityIndicator size="large" color="#007BFF" />
-      </View>
-    )}
+  return (   
       <View style={defaultStyles.container}>
         <View>
           <Text>Tipo</Text>
@@ -111,7 +97,7 @@ export default function Content() {
                         handleCNPJ();
                       }
                     }}
-                    value={payload[item.key]}
+                    value={payload[item.key as keyof typeof payload]}
                   />
                 ) : (
                   <TextInput
@@ -128,6 +114,7 @@ export default function Content() {
                       }
                     }}
                     value={payload[item.key as keyof typeof payload]}
+                    passwordRules={["password","password_confirmation"].includes(item.key) ? "required: upper; required: lower; required: digit; minlength: 8; max-consecutive: 2;" : undefined}
                   />
                 )}
                 {loadingFieldsCep &&
@@ -156,21 +143,5 @@ export default function Content() {
 
         <Button onPress={handleCreate} style={{ ...defaultStyles.button, ...defaultStyles.buttonCreate }}><Text style={defaultStyles.buttonText}>Cadastrar</Text></Button>
       </View>
-
-      <Portal>
-        <Dialog
-          visible={dialogVisible}
-          onDismiss={() => setDialogVisible(false)}
-        >
-          <Dialog.Title>{dialogTitle}</Dialog.Title>
-          <Dialog.Content>
-            <Text>{dialogMessage}</Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={() => setDialogVisible(false)}>OK</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    </PaperProvider>
   );
 }

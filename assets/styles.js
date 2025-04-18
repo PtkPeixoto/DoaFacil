@@ -27,12 +27,12 @@ const defaultStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
-    paddingHorizontal: 10,
     marginBottom: 20,
   },
   input: {
     flex: 1,
     height: 50,
+    backgroundColor: "#fff",
   },
   loadingIndicator: {
     marginLeft: 10,

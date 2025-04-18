@@ -2,8 +2,6 @@ import React, { createContext, useContext, useState } from "react";
 import { IField } from "../../../Types/fields";
 import { CadastroContextData, Payload } from "./types";
 
-
-
 export const initialPayload: Payload = {
   user_type: "",
   name: "Patrick Peixoto",
@@ -21,8 +19,6 @@ export const initialPayload: Payload = {
   companyName: "",
 };
 
-
-
 // Cria o contexto
 const CadastroContext = createContext<CadastroContextData | undefined>(
   undefined
@@ -39,11 +35,7 @@ export const CadastroProvider: React.FC<{ children: React.ReactNode }> = ({
     { id: 2, label: "Empresa", value: "company" },
   ]);
 
-  const [isLoading, setIsLoading] = React.useState(false);
   const [typeIsOpen, setTypeIsOpen] = React.useState(false);
-  const [dialogVisible, setDialogVisible] = React.useState(false);
-  const [dialogMessage, setDialogMessage] = React.useState("");
-  const [dialogTitle, setDialogTitle] = React.useState("");
   const [loadingFieldsCep, setLoadingFieldsCep] = React.useState(false);
   const [loadingFieldsCNPJ, setLoadingFieldsCNPJ] = React.useState(false);
   const [selectedType, setSelectedType] = React.useState<
@@ -157,20 +149,12 @@ export const CadastroProvider: React.FC<{ children: React.ReactNode }> = ({
   return (
     <CadastroContext.Provider
       value={{
-        isLoading,
-        setIsLoading,
         payload,
         setPayload,
         types,
         setTypes,
         typeIsOpen,
         setTypeIsOpen,
-        dialogVisible,
-        setDialogVisible,
-        dialogTitle,
-        setDialogTitle,
-        dialogMessage,
-        setDialogMessage,
         loadingFieldsCep,
         setLoadingFieldsCep,
         loadingFieldsCNPJ,

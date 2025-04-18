@@ -17,8 +17,6 @@ export interface Payload {
 
 // Define o tipo do estado compartilhado
 export interface CadastroContextData {
-  isLoading: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   payload: Payload;
   setPayload: React.Dispatch<React.SetStateAction<Payload>>;
   types: Array<{ id: number; label: string; value: string }>;
@@ -26,13 +24,7 @@ export interface CadastroContextData {
     React.SetStateAction<Array<{ id: number; label: string; value: string }>>
   >;
   typeIsOpen: boolean;
-  setTypeIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  dialogVisible: boolean;
-  setDialogVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  dialogTitle: string;
-  setDialogTitle: React.Dispatch<React.SetStateAction<string>>;
-  dialogMessage: string;
-  setDialogMessage: React.Dispatch<React.SetStateAction<string>>;
+  setTypeIsOpen: React.Dispatch<React.SetStateAction<boolean>>;  
   loadingFieldsCep: boolean;
   setLoadingFieldsCep: React.Dispatch<React.SetStateAction<boolean>>;
   loadingFieldsCNPJ: boolean;

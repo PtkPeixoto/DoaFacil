@@ -1,17 +1,11 @@
-import { createUser } from "../../../Api/functions";
-import { User } from "../../../Api/types";
+import { useGlobalContext } from "../../Provider/GlobalProvider";
 import { useCadastroContext } from "../provider";
 import WithRequest from "./withRequest";
 
 const WithoutRequest = () => {
-  const {
-    payload,
-    setPayload,
-    setLoadingFieldsCep,
-    setLoadingFieldsCNPJ,
-    setDialogMessage,
-    setDialogVisible,
-  } = useCadastroContext();
+  const { payload, setPayload, setLoadingFieldsCep, setLoadingFieldsCNPJ } =
+    useCadastroContext();
+  const { setDialogMessage, setDialogVisible } = useGlobalContext();
   const { consultaCep, consultaCNPJ } = WithRequest();
 
   const handleCep = async () => {

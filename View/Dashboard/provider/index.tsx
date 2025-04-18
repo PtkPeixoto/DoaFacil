@@ -16,11 +16,7 @@ const Context = createContext<ContextData | undefined>(undefined);
 export const ContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [payload, setPayload] = useState<Payload>(initialPayload);
-  const [dialogVisible, setDialogVisible] = useState(false);
-  const [dialogTitle, setDialogTitle] = useState("");
-  const [dialogMessage, setDialogMessage] = useState("");
 
   React.useEffect(() => {
   }, []);
@@ -28,16 +24,8 @@ export const ContextProvider: React.FC<{ children: React.ReactNode }> = ({
   return (
     <Context.Provider
       value={{
-        isLoading,
-        setIsLoading,
         payload,
         setPayload,
-        dialogVisible,
-        setDialogVisible,
-        dialogTitle,
-        setDialogTitle,
-        dialogMessage,
-        setDialogMessage,
       }}
     >
       {children}
