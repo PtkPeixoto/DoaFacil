@@ -8,11 +8,13 @@ import { Icon } from "react-native-paper";
 import { Login } from "../View/Login";
 import { useGlobalContext } from "../View/Provider/GlobalProvider";
 import ProtectedRoute from "./protectedRoute";
+import Logout from "../View/Logout";
 
 const Drawer = createDrawerNavigator<RootStackParamList>();
 
 const AppNavigator = () => {
   const { user } = useGlobalContext();
+
   return (
     <NavigationContainer>
       <Drawer.Navigator
@@ -62,6 +64,7 @@ const AppNavigator = () => {
             drawerIcon: ({ color, size }) => (
               <Icon source="view-dashboard" color={color} size={size} />
             ),
+            drawerItemStyle: { display: user ? "flex" : "none" },
           }}
         >
           {() => (
@@ -70,6 +73,17 @@ const AppNavigator = () => {
             </ProtectedRoute>
           )}
         </Drawer.Screen>
+
+        <Drawer.Screen
+          name="Logout"
+          component={Logout}
+          options={{
+            drawerIcon: ({ color, size }) => (
+              <Icon source="logout" color={color} size={size} />
+            ),
+            drawerItemStyle: { display: user ? "flex" : "none" },
+          }}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   );
