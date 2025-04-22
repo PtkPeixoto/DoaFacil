@@ -6,14 +6,18 @@ import { Cadastro } from "../View/Cadastro";
 import { RootStackParamList } from "../Types/routes";
 import { Icon } from "react-native-paper";
 import { Login } from "../View/Login";
+import { useGlobalContext } from "../View/Provider/GlobalProvider";
+import ProtectedRoute from "./protectedRoute";
 
 const Drawer = createDrawerNavigator<RootStackParamList>();
 
 const AppNavigator = () => {
+  const { user } = useGlobalContext();
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        initialRouteName="Dashboard"
+        key={user ? "authenticated" : "unauthenticated"}
+        initialRouteName={user ? "Dashboard" : "Login"}
         screenOptions={{
           drawerItemStyle: {
             marginVertical: 2, // Espaçamento vertical entre os itens
@@ -28,34 +32,44 @@ const AppNavigator = () => {
           drawerInactiveTintColor: "#333", // Cor do item inativo
         }}
       >
+        {!user && (
+          <>
+            <Drawer.Screen
+              name="Login"
+              component={Login}
+              options={{
+                drawerIcon: ({ color, size }) => (
+                  <Icon source="account-plus" color={color} size={size} />
+                ),
+              }}
+            />
+
+            <Drawer.Screen
+              name="Cadastro"
+              component={Cadastro}
+              options={{
+                drawerIcon: ({ color, size }) => (
+                  <Icon source="account-plus" color={color} size={size} />
+                ),
+              }}
+            />
+          </>
+        )}
+
         <Drawer.Screen
           name="Dashboard"
-          component={Dashboard}
           options={{
             drawerIcon: ({ color, size }) => (
               <Icon source="view-dashboard" color={color} size={size} />
             ),
           }}
-        />
-        <Drawer.Screen
-          name="Cadastro"
-          component={Cadastro}
-          options={{
-            drawerIcon: ({ color, size }) => (
-              <Icon source="account-plus" color={color} size={size} />
-            ),
-          }}
-        />
-
-        <Drawer.Screen
-          name="Login"
-          component={Login}
-          options={{
-            drawerIcon: ({ color, size }) => (
-              <Icon source="account-plus" color={color} size={size} />
-            ),
-          }}
-        />
+        >
+          {() => (
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          )}
+        </Drawer.Screen>
       </Drawer.Navigator>
     </NavigationContainer>
   );

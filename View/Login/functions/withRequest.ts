@@ -52,12 +52,17 @@ const WithRequest = () => {
         setDialogTitle("Erro");
         setDialogMessage("Erro ao realizar login.");
       }
+
+      if (response.status !== 200) {
+        setDialogVisible(true);
+      }
     } catch (error) {
       setDialogTitle("Erro");
       setDialogMessage("Erro ao realizar login.");
+
+      setDialogVisible(true);
     } finally {
       setIsLoading(false);
-      setDialogVisible(true);
     }
   };
 
