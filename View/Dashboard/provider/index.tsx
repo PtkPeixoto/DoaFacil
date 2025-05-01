@@ -1,14 +1,8 @@
 import React, { createContext, useContext, useState } from "react";
 import { ContextData, Payload } from "./types";
+import { ICompany, IDonation, IRescue } from "../../../Types/types";
 
-export const initialPayload: Payload = {
-  companies: [],
-  setCompanies: () => {},
-  rescues: [],
-  setRescues: () => {},
-  donations: [],
-  setDonations: () => {},
-};
+export const initialPayload: Payload = {};
 
 const Context = createContext<ContextData | undefined>(undefined);
 
@@ -17,15 +11,41 @@ export const ContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [payload, setPayload] = useState<Payload>(initialPayload);
+  const [companies, setCompanies] = useState<ICompany[]>([]);
+  const [rescues, setRescues] = useState<IRescue[]>([]);
+  const [donations, setDonations] = useState<IDonation[]>([]);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalDetails, setModalDetails] = useState<{
+    title: string;
+    message: string;
+  } | null>(null);
+  const [modalActions, setModalActions] = useState<
+    | {
+        title: string;
+        action: () => void;
+      }[]
+    | null
+  >(null);
 
-  React.useEffect(() => {
-  }, []);
+  React.useEffect(() => {}, []);
 
   return (
     <Context.Provider
       value={{
         payload,
         setPayload,
+        companies,
+        setCompanies,
+        rescues,
+        setRescues,
+        donations,
+        setDonations,
+        showModal,
+        setShowModal,
+        modalDetails,
+        setModalDetails,
+        modalActions,
+        setModalActions,
       }}
     >
       {children}

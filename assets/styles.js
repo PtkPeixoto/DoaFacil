@@ -21,6 +21,18 @@ const defaultStyles = StyleSheet.create({
     alignItems: "start",
     justifyContent: "start",
   },
+  header: {
+    width: "100%", 
+    marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    paddingBottom: 10,
+  },
+  title:{
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -96,6 +108,47 @@ const defaultStyles = StyleSheet.create({
     marginTop: 10,
     textDecorationLine: "none",
   },
+  donationCard:{
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+    marginVertical: 10,
+    backgroundColor: "#fff",
+    shadowColor: "#000",
+  },
+  donationName:{
+    fontSize: 16,
+    color: "#333",
+    marginBottom: 10,
+  },
+  donationDetails:{
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 5,
+  },
+  donationDetailsTextDestac:{
+    fontWeight: "bold",
+  },
+  donationActions:{
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginTop: 10,
+    gap: 10,
+  },
+  donationActionButton:{
+    backgroundColor: "#007BFF",
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginTop: 5,
+    textDecorationLine: "none",
+  },
+  donationActionButtonText:{
+    color: "#fff",
+    fontSize: 12,
+  },
+
 });
 
 export default defaultStyles;

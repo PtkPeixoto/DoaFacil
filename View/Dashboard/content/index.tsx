@@ -18,11 +18,23 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useGlobalContext } from "../../Provider/GlobalProvider";
 
 export default function Content() {
-  const { payload, setPayload } = useDataContext();
+  const {
+    payload,
+    setPayload,
+    donations,
+    companies,
+    rescues,
+    showModal,
+    setShowModal,
+    modalDetails,
+    setModalDetails,
+    modalActions,
+    setModalActions,
+  } = useDataContext();
 
-  const {  } = useGlobalContext();
+  const {user} = useGlobalContext();
 
-  const { getCompanies, getDonates, getRescues } = WithRequest();
+  const { getCompanies, getDonate, getDonates, getRescues, getUser, requestRescue } = WithRequest();
   // const {  } = WithoutRequest();
 
   const [showDetails, setShowDetails] = React.useState<string[]>([]);
@@ -43,29 +55,144 @@ export default function Content() {
     setShowDetails([...showDetails, companyId]);
   };
 
+  const pressDonation = async (donationId: string) => {
+    const donate = donations.find((donate) => donate.id === donationId);
+    if (!donate) {
+    return;
+    }
+    const user = await getUser(donate.user_id);
+    if(!user){
+      return;
+    }
+
+    setModalDetails({
+      title: "Detalhes da doação",
+      message: `Nome: ${user.name}\nEmail: ${user.email}\nTelefone: ${user.phone}\nEndereço: ${user.address}, ${user.city} - ${user.state}`,
+    });
+    setShowModal(true);
+
+    setModalActions([
+      {
+        title: "Solicitar Retirada",
+        action: () => {pressRescue(donationId)},
+      },
+      {
+        title: "Cancelar",
+        action: () => {}
+      },
+    ]);
+
+  };
+
+  const pressRescue = async (donationId: string) => {
+    const donate = await getDonate(donationId);
+    if (!donate || !user?.id) {
+      return;
+    }
+    
+    const reqRescue = await requestRescue(donationId, user.id);    
+  };
+
+
   return (
     <View style={defaultStyles.container}>
-      {payload.donations.length > 0 && (
+      {donations.length > 0 && (
         <>
           <View style={{ marginBottom: 20 }}>
-            <Text>Resgates Pendentes</Text>
+            <View style={defaultStyles.header}>
+              <Text style={defaultStyles.title}>Doações Disponíveis</Text>
+            </View>
+
+            {donations.map((donation) => (
+              <View key={donation.id} style={{ ...defaultStyles.donationCard }}>
+                <View>
+                  <Text style={defaultStyles.donationName}>
+                    {donation.name}
+                  </Text>
+                  <Text style={defaultStyles.donationDetails}>
+                    <Text style={defaultStyles.donationDetailsTextDestac}>
+                      Descrição:
+                    </Text>{" "}
+                    {donation.description}
+                  </Text>
+                  <Text style={defaultStyles.donationDetails}>
+                    <Text style={defaultStyles.donationDetailsTextDestac}>
+                      Quantidade:
+                    </Text>{" "}
+                    {donation.quantity}
+                  </Text>
+                </View>
+                <View style={defaultStyles.donationActions}>
+                  <Pressable
+                    style={defaultStyles.donationActionButton}
+                    onPress={() => {
+                      pressDonation(donation.id);
+                    }}
+                  >
+                    <Text style={defaultStyles.donationActionButtonText}>
+                      Ver detalhes
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            ))}
           </View>
         </>
       )}
 
-      {payload.rescues.length > 0 && (
+      {rescues.length > 0 && (
         <>
           <View style={{ marginBottom: 20 }}>
-            <Text>Doações</Text>
+            <View style={defaultStyles.header}>
+              <Text style={defaultStyles.title}>Resgates</Text>
+            </View>
+
+            {donations.map((donation) => (
+              <View key={donation.id} style={{ ...defaultStyles.donationCard }}>
+                <View>
+                  <Text style={defaultStyles.donationName}>
+                    {donation.name}
+                  </Text>
+                  <Text style={defaultStyles.donationDetails}>
+                    <Text style={defaultStyles.donationDetailsTextDestac}>
+                      Descrição:
+                    </Text>{" "}
+                    {donation.description}
+                  </Text>
+                  <Text style={defaultStyles.donationDetails}>
+                    <Text style={defaultStyles.donationDetailsTextDestac}>
+                      Quantidade:
+                    </Text>{" "}
+                    {donation.quantity}
+                  </Text>
+                </View>
+                <View style={defaultStyles.donationActions}>
+                  <Pressable
+                    style={defaultStyles.donationActionButton}
+                    onPress={() => {
+                      pressDonation(donation.id);
+                    }}
+                  >
+                    <Text style={defaultStyles.donationActionButtonText}>
+                      Ver detalhes
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            ))}
           </View>
         </>
       )}
 
-      {payload.companies.length > 0 && (
+      {companies.length > 0 && (
         <>
           <View style={{ marginBottom: 20 }}>
-            <Text>Últimas empresas cadastradas</Text>
-            {payload.companies.map((company) => (
+            <View style={defaultStyles.header}>
+              <Text style={defaultStyles.title}>
+                Últimas empresas cadastradas
+              </Text>
+            </View>
+            {companies.map((company) => (
               <Pressable
                 key={company.id}
                 style={{ ...defaultStyles.companyCard }}
@@ -130,6 +257,34 @@ export default function Content() {
           </View>
         </>
       )}
+
+      <Portal>
+        <Dialog visible={showModal} onDismiss={() => setShowModal(false)}>
+          <Dialog.Title>{modalDetails?.title}</Dialog.Title>
+          <Dialog.Content>
+            <Text>{modalDetails?.message}</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            {modalActions && (
+              <View style={{ display: "flex", flexDirection: "row" }}>
+                {modalActions.map((action, index) => (
+                  <Button
+                    key={index}
+                    onPress={() => {
+                      action.action();
+                      setShowModal(false);
+                    }}
+                  >
+                    {action.title}
+                  </Button>
+                ))}
+              </View>
+            )}
+            {!modalActions && (<Button onPress={() => setShowModal(false)}>OK</Button>)}
+            
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </View>
   );
 }

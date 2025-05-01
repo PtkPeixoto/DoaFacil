@@ -9,6 +9,7 @@ import { Login } from "../View/Login";
 import { useGlobalContext } from "../View/Provider/GlobalProvider";
 import ProtectedRoute from "./protectedRoute";
 import Logout from "../View/Logout";
+import { CreateDonation } from "../View/CreateDonation";
 
 const Drawer = createDrawerNavigator<RootStackParamList>();
 
@@ -70,6 +71,22 @@ const AppNavigator = () => {
           {() => (
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          )}
+        </Drawer.Screen>
+
+        <Drawer.Screen
+          name="Cadastrar Doação"
+          options={{
+            drawerIcon: ({ color, size }) => (
+              <Icon source="package" color={color} size={size} />
+            ),
+            drawerItemStyle: { display: user ? "flex" : "none" },
+          }}
+        >
+          {() => (
+            <ProtectedRoute>
+              <CreateDonation />
             </ProtectedRoute>
           )}
         </Drawer.Screen>

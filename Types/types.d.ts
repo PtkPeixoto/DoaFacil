@@ -23,9 +23,10 @@ export interface IRescue {
 
 export interface IDonation {
     id: string;
-    company_id: number;
-    quantity: number;
+    user_id: string;
+    name: string;
     description: string;
+    quantity: number;
     status: string;
     created_at: string;
     updated_at: string;

@@ -3,4 +3,5 @@ export type RootStackParamList = {
   Cadastro: undefined;
   Login: undefined;
   Logout: undefined;
+  "Cadastrar Doação": undefined;
 };
