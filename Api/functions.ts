@@ -38,8 +38,8 @@ export const createDonation = async (donation: Donation) => {
     return response;    
 }
 
-export const getRescues = async () => {
-    const response = await api.get("/rescues");
+export const getRescues = async (filters: {donation_id?: string, user_id?: string}) => {
+    const response = await api.get("/rescuesFiltered", { params: filters });
     return response;
 }
 

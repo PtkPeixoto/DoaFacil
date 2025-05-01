@@ -5,7 +5,7 @@ import {
   getRescues as apiGetRescues,
   getUsersById,
   getDonationById,
-  requestRescue as reqRescue,
+  requestRescue as apiRequestRescue,
 } from "../../../Api/functions";
 import { useDataContext } from "../provider";
 import { RootStackParamList } from "../../../Types/routes";
@@ -28,7 +28,7 @@ const WithRequest = () => {
     setRescues,
   } = useDataContext();
 
-  const { setDialogTitle, setDialogMessage, setDialogVisible, setIsLoading } =
+  const { user, setDialogTitle, setDialogMessage, setDialogVisible, setIsLoading } =
     useGlobalContext();
 
   const getCompanies = async () => {
@@ -107,7 +107,8 @@ const WithRequest = () => {
     setIsLoading(true);
 
     try {
-      const response = await apiGetRescues();
+      if(!user) return;
+      const response = await apiGetRescues({user_id: user.id});
       if (String(response.status).startsWith("2")) {
         if (response.status === 200) {
           const rescues = response.data;
@@ -171,7 +172,7 @@ const WithRequest = () => {
               return;
             }
             
-            const rescueResponse = await reqRescue(donation_id, user_id);
+            const rescueResponse = await apiRequestRescue(donation_id, user_id);
               if (rescueResponse.status === 201) {
                 setDialogTitle("Sucesso");
                 setDialogMessage("Resgate solicitado com sucesso.");

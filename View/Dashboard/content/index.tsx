@@ -16,6 +16,7 @@ import WithRequest from "../functions/withRequest";
 import WithoutRequest from "../functions/withoutRequest";
 import { useFocusEffect } from "@react-navigation/native";
 import { useGlobalContext } from "../../Provider/GlobalProvider";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function Content() {
   const {
@@ -55,8 +56,11 @@ export default function Content() {
     setShowDetails([...showDetails, companyId]);
   };
 
-  const pressDonation = async (donationId: string) => {
-    const donate = donations.find((donate) => donate.id === donationId);
+  const pressDonation = async (donationId: string, onlyView: boolean = false ) => {
+    const donate = donations.find((donate) => {
+      return String(donate.id) === String(donationId)
+    });
+    
     if (!donate) {
     return;
     }
@@ -70,6 +74,11 @@ export default function Content() {
       message: `Nome: ${user.name}\nEmail: ${user.email}\nTelefone: ${user.phone}\nEndereço: ${user.address}, ${user.city} - ${user.state}`,
     });
     setShowModal(true);
+    
+    if (onlyView) {
+      setModalActions(null);
+      return;
+    }
 
     setModalActions([
       {
@@ -95,6 +104,7 @@ export default function Content() {
 
 
   return (
+    <ScrollView>
     <View style={defaultStyles.container}>
       {donations.length > 0 && (
         <>
@@ -147,34 +157,39 @@ export default function Content() {
               <Text style={defaultStyles.title}>Resgates</Text>
             </View>
 
-            {donations.map((donation) => (
-              <View key={donation.id} style={{ ...defaultStyles.donationCard }}>
+            {rescues.map((rescue) => (
+              <View key={rescue.id} style={{ ...defaultStyles.donationCard }}>
                 <View>
                   <Text style={defaultStyles.donationName}>
-                    {donation.name}
-                  </Text>
-                  <Text style={defaultStyles.donationDetails}>
-                    <Text style={defaultStyles.donationDetailsTextDestac}>
-                      Descrição:
-                    </Text>{" "}
-                    {donation.description}
+                    {rescue.donation_name}
                   </Text>
                   <Text style={defaultStyles.donationDetails}>
                     <Text style={defaultStyles.donationDetailsTextDestac}>
                       Quantidade:
                     </Text>{" "}
-                    {donation.quantity}
+                    {rescue.rescued_quantity}
                   </Text>
                 </View>
                 <View style={defaultStyles.donationActions}>
                   <Pressable
                     style={defaultStyles.donationActionButton}
                     onPress={() => {
-                      pressDonation(donation.id);
+                      pressDonation(rescue.donation_id, true);
                     }}
                   >
                     <Text style={defaultStyles.donationActionButtonText}>
                       Ver detalhes
+                    </Text>
+                  </Pressable>
+
+                  <Pressable
+                    style={defaultStyles.donationActionButton}
+                    onPress={() => {
+                      pressDonation(rescue.id);
+                    }}
+                  >
+                    <Text style={defaultStyles.donationActionButtonText}>
+                      Efetivar Resgate
                     </Text>
                   </Pressable>
                 </View>
@@ -286,5 +301,6 @@ export default function Content() {
         </Dialog>
       </Portal>
     </View>
+    </ScrollView>
   );
 }

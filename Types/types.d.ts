@@ -14,9 +14,14 @@ export interface ICompany {
 
 export interface IRescue {
     id: string;
-    company_id: number;
-    description: string;
-    status: string;
+    donation_id: string;
+    user_id: string;
+    user_name: string;
+    donation_name: string;
+    donor_id: string;
+    donor_name: string;
+    rescued_quantity: number;
+    rescue_date: string;
     created_at: string;
     updated_at: string;
 }
