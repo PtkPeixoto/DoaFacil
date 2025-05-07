@@ -47,3 +47,11 @@ export const requestRescue = async (donation_id: string, user_id: string) => {
     const response = await api.post("/createRescue", { donation_id, user_id });
     return response;
 }
+
+export const effectuateRescue = async (rescue_id: string) => {
+    const body = {
+        recue_date: new Date().toISOString(),
+    }
+    const response = await api.put(`/updateRescue/${rescue_id}`, body);
+    return response;
+}

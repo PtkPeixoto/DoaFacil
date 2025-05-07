@@ -14,6 +14,7 @@ export interface ICompany {
 
 export interface IRescue {
     id: string;
+    rescue_token: string;
     donation_id: string;
     user_id: string;
     user_name: string;

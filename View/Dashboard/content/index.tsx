@@ -99,8 +99,40 @@ export default function Content() {
       return;
     }
     
-    const reqRescue = await requestRescue(donationId, user.id);    
+    const reqRescue = await requestRescue(donationId, user.id);
+    getRescues();
   };
+
+  const pressEffectuateRescue = async (rescueId: string) => {
+    const rescue = rescues.find((rescue) => {
+      return String(rescue.id) === String(rescueId)
+    });
+    
+    if (!rescue) {
+      return;
+    }
+    console.log(rescue.donor_id, user?.id, (rescue.donor_id !== user?.id));
+
+    if(String(rescue.donor_id) !== String(user?.id)){
+      setModalDetails({
+        title: "Informe o código de resgate",
+        message: `${rescue.rescue_token}`,
+      });
+      setShowModal(true);    
+      setModalActions(null);
+
+      return;
+    }
+
+    setModalDetails({
+      title: "Resgate efetuado com sucesso!",
+      message: `${rescue.rescued_quantity} de ${rescue.donation_name}`,
+    });
+    setShowModal(true);    
+    setModalActions(null);
+
+    console.log(rescue);
+  }
 
 
   return (
@@ -169,6 +201,12 @@ export default function Content() {
                     </Text>{" "}
                     {rescue.rescued_quantity}
                   </Text>
+                  <Text style={defaultStyles.donationDetails}>
+                    <Text style={defaultStyles.donationDetailsTextDestac}>
+                      Código de resgate:
+                    </Text>{" "}
+                    {rescue.rescue_token}
+                  </Text>
                 </View>
                 <View style={defaultStyles.donationActions}>
                   <Pressable
@@ -185,7 +223,7 @@ export default function Content() {
                   <Pressable
                     style={defaultStyles.donationActionButton}
                     onPress={() => {
-                      pressDonation(rescue.id);
+                      pressEffectuateRescue(rescue.id);
                     }}
                   >
                     <Text style={defaultStyles.donationActionButtonText}>
