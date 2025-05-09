@@ -2,8 +2,8 @@ import React, { createContext, useContext, useState } from "react";
 import { ContextData, Payload } from "./types";
 
 export const initialPayload: Payload = {
-  email: "patrickpeixoto.web@gmail.com",
-  password: "Ptk@26952431",
+  email: "",
+  password: "",
 };
 
 const Context = createContext<ContextData | undefined>(undefined);
