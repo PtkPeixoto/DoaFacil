@@ -6,6 +6,7 @@ import {
   getUsersById,
   getDonationById,
   requestRescue as apiRequestRescue,
+  effectuateRescue,
 } from "../../../Api/functions";
 import { useDataContext } from "../provider";
 import { RootStackParamList } from "../../../Types/routes";
@@ -109,8 +110,9 @@ const WithRequest = () => {
     try {
       if(!user) return;
       const response = await apiGetRescues({user_id: user.id});
+
       if (String(response.status).startsWith("2")) {
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 201) {
           const rescues = response.data;
           setRescues(rescues);
         }
@@ -199,7 +201,38 @@ const WithRequest = () => {
       }
     }
 
-  return { getCompanies, getDonate, getDonates, getRescues, getUser, requestRescue };
+  const effectiveRescue = async (rescue_id: string) => {
+    setIsLoading(true);
+
+    try {
+      const response = await effectuateRescue(rescue_id);
+      console.log("Response:", response);
+
+      if (String(response.status).startsWith("2")) {
+        if (response.status === 200) {
+          setDialogTitle("Sucesso");
+          setDialogMessage("Resgate finalizado com sucesso.");
+          setDialogVisible(true);
+          setIsLoading(false);
+        } else {
+          setDialogTitle("Erro");
+          setDialogMessage("Não foi possível finalizar o resgate.");
+          setDialogVisible(true);
+          setIsLoading(false);
+        }
+      } else {
+        setDialogTitle("Erro");
+        setDialogMessage("Não foi possível finalizar o resgate.");
+        setDialogVisible(true);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log("Erro ao finalizar resgate:", error);
+      setIsLoading(false);
+    }
+  }
+
+  return { getCompanies, getDonate, getDonates, getRescues, getUser, requestRescue, effectiveRescue };
 };
 
 export default WithRequest;

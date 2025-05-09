@@ -49,9 +49,11 @@ export const requestRescue = async (donation_id: string, user_id: string) => {
 }
 
 export const effectuateRescue = async (rescue_id: string) => {
+    const date = new Date();
     const body = {
-        recue_date: new Date().toISOString(),
+        rescue_date: `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
     }
+    console.log("body", body);
     const response = await api.put(`/updateRescue/${rescue_id}`, body);
     return response;
 }

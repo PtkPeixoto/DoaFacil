@@ -35,7 +35,7 @@ export default function Content() {
 
   const {user} = useGlobalContext();
 
-  const { getCompanies, getDonate, getDonates, getRescues, getUser, requestRescue } = WithRequest();
+  const { getCompanies, getDonate, getDonates, getRescues, getUser, requestRescue, effectiveRescue } = WithRequest();
   // const {  } = WithoutRequest();
 
   const [showDetails, setShowDetails] = React.useState<string[]>([]);
@@ -101,6 +101,7 @@ export default function Content() {
     
     const reqRescue = await requestRescue(donationId, user.id);
     getRescues();
+    getDonates();
   };
 
   const pressEffectuateRescue = async (rescueId: string) => {
@@ -111,7 +112,6 @@ export default function Content() {
     if (!rescue) {
       return;
     }
-    console.log(rescue.donor_id, user?.id, (rescue.donor_id !== user?.id));
 
     if(String(rescue.donor_id) !== String(user?.id)){
       setModalDetails({
@@ -124,14 +124,8 @@ export default function Content() {
       return;
     }
 
-    setModalDetails({
-      title: "Resgate efetuado com sucesso!",
-      message: `${rescue.rescued_quantity} de ${rescue.donation_name}`,
-    });
-    setShowModal(true);    
-    setModalActions(null);
-
-    console.log(rescue);
+    const response = await effectiveRescue(rescueId);
+    getRescues();
   }
 
 
