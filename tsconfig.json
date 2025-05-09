@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "typeRoots": ["./node_modules/@types", "./env.d.ts"],
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "extends": "expo/tsconfig.base",
+}
