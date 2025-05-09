@@ -247,7 +247,7 @@ export default function Content() {
                   pressCompany(company.id);
                 }}
               >
-                <Text style={defaultStyles.companyName}>{company.name}</Text>
+                <Text style={defaultStyles.companyName}>{company.fantasyName}</Text>
                 <Text style={defaultStyles.companyDetails}>
                   <Text style={defaultStyles.companyDetailsTextDestac}>
                     CNPJ:

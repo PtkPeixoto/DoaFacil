@@ -10,6 +10,8 @@ export interface ICompany {
     email: string;
     created_at: string;
     updated_at: string;
+    fantasyName: string;
+    companyName: string;
 }
 
 export interface IRescue {

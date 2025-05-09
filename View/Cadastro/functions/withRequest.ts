@@ -76,6 +76,8 @@ const WithRequest = () => {
       (value) => value.trim() !== ""
     );
 
+    console.log(allFieldsFilled, newFields);
+
     if (!allFieldsFilled) {
       setIsLoading(false);
       setDialogTitle("Erro ao criar usuário");

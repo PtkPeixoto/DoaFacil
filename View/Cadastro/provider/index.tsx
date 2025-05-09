@@ -134,6 +134,24 @@ export const CadastroProvider: React.FC<{ children: React.ReactNode }> = ({
       placeholder: "Razão Social",
       keyboardType: "default",
     },
+    {
+      key: "name",
+      label: "Nome",
+      placeholder: `${
+        selectedType === "company" ? "Nome do contato" : "Nome"
+      }`,
+      keyboardType: "default",
+    },
+    {
+      key: "phone",
+      label: "Telefone",
+      placeholder: `${
+        selectedType === "company"
+          ? "Telefone para contato"
+          : "Telefone"
+      }`,
+      keyboardType: "phone-pad",
+    },
   ]);
 
   React.useEffect(() => {
